@@ -135,8 +135,16 @@ def PiecewiseAffineTransform(srcIm, srcPoints, dstIm, dstPoints):
 		affine = np.dot(meanVertPos, np.linalg.inv(shapeVertPos)) 
 		triAffines.append(affine)
 
-	#Calculate pixel colours
+	#Prepare arrays, check they are 3D	
 	targetArr = np.copy(np.asarray(dstIm, dtype=np.uint8))
+	srcArr = srcArr.reshape(srcArr.shape[0], srcArr.shape[1], len(srcIm.mode))
+	targetArr = targetArr.reshape(targetArr.shape[0], targetArr.shape[1], len(dstIm.mode))
+
+	#Calculate pixel colours
 	WarpProcessing(srcIm, srcArr, targetArr, inTessTriangle, triAffines, dstPoints)
-	dstIm.paste(Image.fromarray(targetArr))	
+	
+	#Convert single channel images to 2D
+	if targetArr.shape[2] == 1:
+		targetArr = targetArr.reshape((targetArr.shape[0],targetArr.shape[1]))
+	dstIm.paste(Image.fromarray(targetArr))
 

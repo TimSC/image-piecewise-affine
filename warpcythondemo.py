@@ -6,7 +6,7 @@ if __name__ == "__main__":
 	srcIm = Image.open("lena.jpg")	
 
 	#Create destination image
-	dstIm = Image.new("RGB",(500,500))
+	dstIm = Image.new(srcIm.mode,(500,500))
 
 	#Define control points for warp
 	srcCloud = [(100,100),(400,100),(400,400),(100,400)]
